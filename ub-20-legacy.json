@@ -20,7 +20,7 @@
       " initrd=/install/initrd.gz",
       " auto-install/enable=true",
       " debconf/priority=critical",
-      " preseed/url=http://10.128.64.152/ub20-preseed/preseed.cfg<wait>",
+      " preseed/url=http://10.128.64.152/ub20-preseed/ub20-preseed.cfg<wait>",
       " -- <wait>",
       " <enter><wait>"
     ],
