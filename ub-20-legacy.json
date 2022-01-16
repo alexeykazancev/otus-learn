@@ -1,0 +1,61 @@
+{
+  "variables": {
+    "esxi_datastore": "ds-test-02",
+    "esxi_host": "10.128.64.43",
+    "esxi_password": "xxx",
+    "esxi_username": "root"
+  },
+
+  "builders": [{
+    "communicator": "ssh",
+    "type": "vmware-iso",
+    "iso_url": "./iso/ubuntu-20-legacy.iso",
+    "iso_checksum": "f11bda2f2caed8f420802b59f382c25160b114ccc665dbac9c5046e7fceaced2",
+    "boot_wait": "5s",
+    "boot_command": [
+      "<esc><wait>",
+      "<esc><wait>",
+      "<enter><wait>",
+      "/install/vmlinuz<wait>",
+      " initrd=/install/initrd.gz",
+      " auto-install/enable=true",
+      " debconf/priority=critical",
+      " preseed/url=http://10.128.64.152/ub20-preseed/preseed.cfg<wait>",
+      " -- <wait>",
+      " <enter><wait>"
+    ],
+    "cpus": "2",
+    "memory": "4096",
+    "disk_size": "16384",
+    "disk_type_id": "zeroedthick",
+    "skip_compaction": true,
+    "skip_export": true,
+    "guest_os_type": "Ubuntu-64",
+    "output_directory": "ub20-legacy",
+    "tools_upload_flavor": "linux",
+    "format": "ovf",
+    "ovftool_options": ["--noImageFiles=true", "--noNvramFile=true"],
+    "headless": true,
+    "shutdown_command": "echo 'packer shutdown'|shutdown -P now",
+    "ssh_password": "testpas",
+    "ssh_port": 22,
+    "ssh_pty": "true",
+    "ssh_username": "root",
+    "ssh_timeout": "30m",
+    "vm_name": "ubuntu-20-legacy",
+    "network_name": "Network-64",
+    "network_adapter_type": "e1000",
+    "remote_type": "esx5",
+    "remote_host": "{{user `esxi_host`}}",
+    "remote_datastore": "{{user `esxi_datastore`}}",
+    "remote_username": "{{user `esxi_username`}}",
+    "remote_password": "{{user `esxi_password`}}",
+    "keep_registered": true,
+    "vnc_disable_password": true
+  }],
+
+  "provisioners": [{
+    "script": "./provision/ub-20-legacy-inst-package.sh",
+    "type": "shell"
+  }]
+}
