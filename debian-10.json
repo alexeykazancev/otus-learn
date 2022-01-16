@@ -18,7 +18,7 @@
       " initrd=/install.amd/initrd.gz",
       " auto-install/enable=true",
       " debconf/priority=critical",
-      " preseed/url=http://10.128.64.152/deb10-132/preseed.cfg",
+      " preseed/url=http://10.128.64.152/deb10-132/deb10-preseed.cfg",
       " -- <wait>",
       " <enter><wait>"
     ],
