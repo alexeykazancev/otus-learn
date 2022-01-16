@@ -1,0 +1,59 @@
+{
+  "variables": {
+    "esxi_datastore": "ds-test-02",
+    "esxi_host": "10.128.64.43",
+    "esxi_password": "xxx",
+    "esxi_username": "root"
+  },
+
+  "builders": [{
+    "communicator": "ssh",
+    "type": "vmware-iso",
+    "iso_url": "./iso/debian-10.6.iso",
+    "iso_checksum": "3b6d4c43e10a06731a98005d0b1c14a1",
+    "boot_wait": "5s",
+    "boot_command": [
+      "<esc><wait>",
+      "/install.amd/vmlinuz<wait>",
+      " initrd=/install.amd/initrd.gz",
+      " auto-install/enable=true",
+      " debconf/priority=critical",
+      " preseed/url=http://10.128.64.152/deb10-132/preseed.cfg",
+      " -- <wait>",
+      " <enter><wait>"
+    ],
+    "cpus": "2",
+    "memory": "4096",
+    "disk_size": "16384",
+    "disk_type_id": "zeroedthick",
+    "skip_compaction": true,
+    "skip_export": true,
+    "guest_os_type": "debian10-64",
+    "output_directory": "debian-10-base",
+    "tools_upload_flavor": "linux",
+    "format": "ovf",
+    "ovftool_options": ["--noImageFiles=true", "--noNvramFile=true"],
+    "headless": true,
+    "shutdown_command": "echo 'packer shutdown'|shutdown -P now",
+    "ssh_password": "testpas",
+    "ssh_port": 22,
+    "ssh_pty": "true",
+    "ssh_username": "root",
+    "ssh_timeout": "30m",
+    "vm_name": "debian-10-base",
+    "network_name": "Network-64",
+    "network_adapter_type": "e1000",
+    "remote_type": "esx5",
+    "remote_host": "{{user `esxi_host`}}",
+    "remote_datastore": "{{user `esxi_datastore`}}",
+    "remote_username": "{{user `esxi_username`}}",
+    "remote_password": "{{user `esxi_password`}}",
+    "keep_registered": true,
+    "vnc_disable_password": true
+  }],
+
+  "provisioners": [{
+    "script": "./provision/debian-10-install-package.sh",
+    "type": "shell"
+  }]
+}
